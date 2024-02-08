@@ -2,10 +2,11 @@
 <?php
     include 'koneksi.php';
 
+    session_start(); // aktivasi variable session
+
     $query = "SELECT * FROM tb_siswa;";
     $sql = mysqli_query($conn, $query);
     $no = 0;
-
 
     // while($result= mysqli_fetch_assoc($sql)){
     // echo $result['nama_siswa']."<br>";
@@ -25,11 +26,24 @@
     <!-- Bootstrap 5 -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.min.js"></script>
+
     <!-- font awesome -->
     <link rel="stylesheet" href="fontawesome/css/font-awesome.min.css">
+
+    <!-- data tables -->
+    <link href="datatables/datatables.css" rel="stylesheet">
+    <script src="datatables/datatables.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>data siswa</title>
+    <title>Data Siswa</title>
 </head>
+<!-- untuk pencarian table -->
+<script type="text/javascript">
+    $("document").ready(function(){
+        $('#datatable').DataTable();
+    })
+</script>
+
 <body>
     <!-- navbar -->
     <nav class="navbar bg-body-tertiary">
@@ -41,27 +55,45 @@
     </nav>
 
     <!-- Judul -->
-
-    <div class="container">
+    <div class="container mb-5">
         <figure class="mt-3">
             <blockquote class="blockquote">
-                <p>data yang tersimpan di data base</p>
+                <p>Data yang tersimpan di data base</p>
             </blockquote>
             <figcaption class="blockquote-footer">
                 CRUD <cite title="Source Title">Creat Read Update Delete</cite>
             </figcaption>
         </figure>
         
+        <!-- button tambah data -->
         <a href="kelola.php" type="button" class="btn btn-primary mb-3" >
             <i class="fa fa-plus" aria-hidden="true"></i>
             Tambah Data
         </a>
 
+        <!-- jika ada session maka alert akan tampil -->
+        <?php
+            if (isset($_SESSION['eksekusi'])) :
+        ?>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong>
+                    <?php
+                        echo $_SESSION['eksekusi'];
+                    ?>
+                </strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php
+            session_destroy(); // mebghapus session
+            endif;
+        ?>
+
+        <!-- tabel data -->
         <div class="table-responsive">
-            <table class="table align-middle table-bordered table-hover">
-                <thead>
+            <table id="datatable" class="table align-middle table-bordered table-hover">
+                <thead> <!-- judul tabel -->
                     <tr>
-                        <th> <center>No.</center> </th>
+                        <th><center>No.</center></th>
                         <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Jenis Kelamin</th>
@@ -71,12 +103,10 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 <!-- untuk menampilkan semua data dengan while -->
                     <?php
                         while($result= mysqli_fetch_assoc($sql)){
                     ?>
-
                         <tr>
                             <td><center>
                                 <?php echo ++$no; ?>
