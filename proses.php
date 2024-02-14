@@ -1,8 +1,9 @@
 <?php
     include "fungsi.php";
     session_start();
-
+    
     if (isset($_POST["aksi"])) {
+    //tambah
         if ($_POST["aksi"] == "tambah") {
 
             $berhasil = tambah_data($_POST,$_FILES);
@@ -14,6 +15,7 @@
                 echo $berhasil;
             }
         }   
+    // edit
         else if ($_POST["aksi"] == "edit") {
 
             $berhasil = ubah_data($_POST,$_FILES);
@@ -27,6 +29,7 @@
         }
     }
 
+    // hapus
     if (isset($_GET['hapus'])) {
         
         $berhasil = hapus_data($_GET);
